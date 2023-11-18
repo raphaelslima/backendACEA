@@ -30,8 +30,8 @@ export class ItemsController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() task: Item): Promise<Item> {
-    return this.itemService.update(id, task);
+  async update(@Param('id') id: string, @Body() item: Item): Promise<Item> {
+    return this.itemService.update(id, item);
   }
 
   @Delete(':id')

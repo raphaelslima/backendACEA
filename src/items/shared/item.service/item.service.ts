@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Item } from '../item/item';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ItemService {
@@ -17,13 +16,18 @@ export class ItemService {
   }
 
   async create(item: Item) {
-    const createdTask = new this.itemModel(item);
-    return await createdTask.save();
+    const createdItem = new this.itemModel(item);
+    return await createdItem.save();
   }
 
   async update(id: string, item: Item) {
-    await this.itemModel.updateOne({ _id: new ObjectId(id) }, item).exec();
-    return this.getById(id);
+    await this.itemModel.findOneAndUpdate(
+      { _id: id },
+      { $set: item },
+      { new: true },
+    );
+
+    return await this.getById(id);
   }
 
   async delete(id: string) {
